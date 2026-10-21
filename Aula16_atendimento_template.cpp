@@ -109,39 +109,52 @@ struct FilaPacientes {
         }
     }
 };
-// ════════════════════════════════════════════════════════════════
-// R2 · HISTÓRICO COM PILHA (estrutura LIFO)
-// ════════════════════════════════════════════════════════════════
-// Cada atendimento concluído vai para a pilha de histórico
-// O médico pode consultar o último atendimento com peek()
 
 struct PilhaHistorico {
     No* topo = nullptr;
 
-    // TODO 4: Implemente push(nome)
-    //         Empilha um atendimento concluído
+    // TODO 4: Empilha um atendimento concluído
     void push(const string& nome) {
-        // ...
+        No* novo = new No(nome, 0);
+        novo->prox = topo;
+        topo = novo;
     }
 
-    // TODO 5: Implemente pop()
-    //         Desempilha e retorna o último atendimento
+    // TODO 5: Desempilha e retorna o último atendimento
     string pop() {
-        return "";  // substitua pelo retorno correto
+        if (topo == nullptr) {
+            return "";
+        }
+
+        No* temp = topo;
+        string nome = temp->nome;
+
+        topo = topo->prox;
+
+        delete temp;
+        return nome;
     }
 
-    // TODO 6: Implemente peek()
-    //         Retorna o último atendimento SEM remover
+    // TODO 6: Retorna o último atendimento sem remover
     string peek() const {
-        return "";  // substitua pelo retorno correto
+        if (topo == nullptr) {
+            return "";
+        }
+
+        return topo->nome;
     }
 
-    bool isEmpty() const { return topo == nullptr; }
+    bool isEmpty() const {
+        return topo == nullptr;
+    }
 
     ~PilhaHistorico() {
-        while (!isEmpty()) pop();
+        while (!isEmpty()) {
+            pop();
+        }
     }
 };
+
 
 // ════════════════════════════════════════════════════════════════
 // R3 · LISTA DE MÉDICOS DISPONÍVEIS (lista encadeada)
