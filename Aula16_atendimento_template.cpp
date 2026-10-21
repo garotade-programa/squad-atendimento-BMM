@@ -17,7 +17,6 @@
 // ║   +2 por README.md completo                                              ║
 // ║   +2 squad com melhor demo (2 min)                                       ║
 // ╚══════════════════════════════════════════════════════════════════════════╝
-
 #include <iostream>
 #include <string>
 using namespace std;
@@ -45,36 +44,71 @@ struct FilaPacientes {
     // TODO 1: Implemente enqueue(nome, urgencia)
     //         Paciente entra no final da fila
     void enqueue(const string& nome, int urgencia) {
-        // Dica: crie um novo No, atualize 'tras' e 'frente' se necessário
-        // ...
+        No* novo = new No(nome, urgencia);
+
+        if (tras == nullptr) {
+            frente = novo;
+            tras = novo;
+        } else {
+            tras->prox = novo;
+            tras = novo;
+        }
     }
 
     // TODO 2: Implemente dequeue()
     //         Remove e retorna o nome do paciente na frente da fila
     string dequeue() {
-        // Dica: guarde o nome antes de deletar, atualize 'frente'
-        //       se frente ficar nullptr, atualize 'tras' também!
-        return "";  // substitua pelo retorno correto
+        if (frente == nullptr) {
+            return "";
+        }
+
+        No* temp = frente;
+        string nome = temp->nome;
+
+        frente = frente->prox;
+
+        if (frente == nullptr) {
+            tras = nullptr;
+        }
+
+        delete temp;
+
+        return nome;
     }
 
     // TODO 3: Implemente frente_peek() — ver quem está na frente sem remover
     string frente_peek() const {
-        return "";  // substitua pelo retorno correto
+        if (frente == nullptr) {
+            return "";
+        }
+
+        return frente->nome;
     }
 
-    bool isEmpty() const { return frente == nullptr; }
+    bool isEmpty() const {
+        return frente == nullptr;
+    }
 
     // BÔNUS: Implemente tamanho() que conta os nós na fila
     int tamanho() const {
-        // ...
-        return 0;
+        int contador = 0;
+
+        No* p = frente;
+
+        while (p != nullptr) {
+            contador++;
+            p = p->prox;
+        }
+
+        return contador;
     }
 
     ~FilaPacientes() {
-        while (!isEmpty()) dequeue();
+        while (!isEmpty()) {
+            dequeue();
+        }
     }
 };
-
 // ════════════════════════════════════════════════════════════════
 // R2 · HISTÓRICO COM PILHA (estrutura LIFO)
 // ════════════════════════════════════════════════════════════════
